@@ -110,7 +110,10 @@ def open_validated(url, allowed_hosts, timeout, robots_disallowed=()):
             if e.code not in _REDIRECT_CODES:
                 raise
             loc = e.headers.get("Location") if e.headers else None
-            e.close()
+            # HTTPError test doubles and body-less redirects can have no fp.
+            # Closing only a real response stream preserves the redirect verdict.
+            if getattr(e, "fp", None) is not None:
+                e.close()
             if not loc:
                 raise RedirectBlocked(f"리다이렉트 Location 없음: {url[:80]}")
             nxt = urllib.parse.urljoin(url, loc)

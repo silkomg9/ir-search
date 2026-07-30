@@ -63,6 +63,33 @@
 | R&D 자금 (법인) | + SMTECH |
 | 특정 지역 정착 | + 해당 지역 TP·진흥원 |
 
+## 범위 계획기와 확장 후보
+
+조사 전에 `scripts/scope_plan.py`로 **선택 범위를 먼저 고정**한다. 이 계획기는
+네트워크·LLM을 호출하지 않으며 `quick / focused / recommended / all_registered /
+all_known / custom` 프리셋, 소스별 선택·제외·비적용·수동 상태, 요청 수·시간 추정, 모델 토큰 0,
+안정적인 `scope_fingerprint`를 JSON으로 만든다.
+
+`all_registered`의 "전체"는 **이 저장소에 검증된 자동 어댑터가 있는 5개 소스 전체**라는
+뜻이지 인터넷 전체가 아니다. 아래 공식 출처는 유용한 확장 후보지만, 현재 자동 어댑터·
+robots·약관·페이지 계약이 검증되지 않았으므로 자동 수집하지 않는다. 사용자가 custom으로
+명시 선택하거나 `all_known`을 고르면 계획서에 `candidate + manual`로 남기고 브라우저
+수동 확인만 한다.
+
+| source id | 공식 출처 | 프로필 트리거 | 현재 상태 |
+|---|---|---|---|
+| `iris` | 범부처통합연구지원시스템 | R&D·연구개발 | candidate/manual |
+| `iitp` | 정보통신기획평가원 | ICT·AI·R&D | candidate/manual |
+| `nia` | 한국지능정보사회진흥원 | AI·데이터 | candidate/manual |
+| `kiat` | 한국산업기술진흥원 | 산업기술·제조 R&D | candidate/manual |
+| `exportvoucher` | 수출지원기반활용사업 | 수출·글로벌 | candidate/manual |
+| `ccei` | 창조경제혁신센터 | 창업·공간·멘토링 | candidate/manual |
+| `regional_portal` | 프로필 지역 TP·경제진흥원 | 지역이 있을 때 | candidate/manual |
+
+후보를 자동화하려면 공개 URL·운영기관·robots/약관 스냅샷·페이지/API 계약·쿼터·
+중복 키·첨부 및 리다이렉트 경계를 먼저 픽스처 테스트로 고정해야 한다. 그 전에는
+동봉 크롤러의 `all` 목록에 넣지 않는다.
+
 ## 접근 시 공통 원칙
 
 - 공개 페이지만. robots/이용약관을 존중하고 요청 간 0.3초 이상 지연

@@ -43,6 +43,45 @@ description: '한국 정부·공공기관 지원사업(창업지원, 사업화 �
 
 `마지막 조사` 줄은 매 조사 완료 시 갱신한다 — 재조사(diff 모드)가 이 경로로 직전 결과를 찾는다. 이 파일은 로컬 프로젝트 폴더에만 저장되며, 프로필 축 외의 개인정보는 넣지 않는다.
 
+### 0.5단계 — 조사 범위 명시 선택
+
+실제 수집 전에 범위 계획기를 실행해 사용자 선택과 커버리지 한계를 고정한다. 계획기는
+Python 표준 라이브러리만 사용하고 **네트워크·LLM을 호출하지 않으므로 모델 토큰은 0**이다.
+
+```bash
+# 빠른 확인: K-Startup만
+python3 "${CLAUDE_PLUGIN_ROOT}/skills/ir-search/scripts/scope_plan.py" \
+    --preset quick -o scope-plan.json
+
+# 특정 소스 하나만
+python3 "${CLAUDE_PLUGIN_ROOT}/skills/ir-search/scripts/scope_plan.py" \
+    --preset focused --source kstartup -o scope-plan.json
+
+# 프로필 기반 권장 범위
+python3 "${CLAUDE_PLUGIN_ROOT}/skills/ir-search/scripts/scope_plan.py" \
+    --preset recommended --need ai --need rnd --province 서울 -o scope-plan.json
+
+# 사용자가 직접 고른 범위 (후보 소스는 자동화하지 않고 manual로 남음)
+python3 "${CLAUDE_PLUGIN_ROOT}/skills/ir-search/scripts/scope_plan.py" \
+    --preset custom --source kstartup --source iris -o scope-plan.json
+```
+
+프리셋 의미:
+
+- `quick`: K-Startup만. 빠른 확인이지 전체 조사가 아니다
+- `focused`: 사용자가 지목한 소스 정확히 하나
+- `recommended`: K-Startup·기업마당 + 프로필 태그에 맞는 **검증된** 어댑터
+- `all_registered`: 현재 저장소에 검증된 자동 어댑터 5개 전체. 인터넷 전체가 아니다
+- `all_known`: 등록 어댑터와 알려진 공식 후보 전체. 후보는 모두 수동 확인으로 남는다
+- `custom`: 사용자가 명시한 소스 조합. 미검증 후보는 `candidate/manual`
+
+`scope-plan.json`의 모든 소스 상태(`selected / omitted_by_user / not_applicable`,
+`automated / manual`)와 요청 수·시간 추정을 먼저 보여준다. 보고서에는
+`scope_fingerprint`와 "선택 범위 기준" 커버리지를 기록한다. 재조사는 직전과 fingerprint가
+같을 때만 GONE·UNCHANGED 승계를 허용한다. fingerprint가 다르면 소스 제외를 GONE으로
+오판하지 말고 범위 변경으로 표시해 전체 재판정한다. 후보·수동 출처 목록과 등록 조건은
+`references/sources.md`를 따른다.
+
 ### 재조사 — diff 모드
 
 프로필의 `마지막 조사` 폴더가 존재하면 (또는 사용자가 이전 보고서 폴더를 지목하면) **전수 재검토 대신 증분 조사**를 한다. 지원사업 조사는 2~4주마다 반복하는 일이고, 매번 250건+를 다시 읽는 것은 낭비다:

@@ -62,6 +62,37 @@ Every mentioned announcement carries its original URL; anything not stated in th
 
 More sources (NIA, IITP, IRIS, regional agencies) are catalogued in `skills/ir-search/references/sources.md`.
 
+## Choose the research scope
+
+You do not have to sweep every portal on every run. `scope_plan.py` freezes the requested
+scope first, separates automated, manual, and candidate sources, and emits a stable
+`scope_fingerprint`. It makes no network, API, or model call, so it consumes no tokens or
+external quota.
+
+| Preset | Purpose |
+|---|---|
+| `quick` | Fast pass over K-Startup only |
+| `focused` | Exactly one registered source selected by the user |
+| `recommended` | K-Startup, Bizinfo, plus profile-relevant automated sources |
+| `all_registered` | Every currently automated source |
+| `all_known` | Include candidate and manual-verification sources in the plan |
+| `custom` | Only sources named with `--include` |
+
+```bash
+python3 skills/ir-search/scripts/scope_plan.py \
+  --preset recommended --need ai --need rnd \
+  --out survey-20260730/scope-plan.json
+
+# K-Startup only
+python3 skills/ir-search/scripts/scope_plan.py \
+  --preset custom --source kstartup --out /tmp/ir-scope.json
+```
+
+With `all_known`, IRIS, IITP, NIA, KIAT, Export Voucher, CCEI, and regional agencies remain
+explicitly `manual` or `candidate`; they are never presented as successful automated
+coverage. Diff mode only concludes disappearance when both the fingerprint and collection
+completeness permit it, so a scope change is not misreported as GONE.
+
 ### K-Startup official API (optional — more accurate & faster when present, crawl otherwise)
 
 `kstartup_crawl.py list` uses the official [data.go.kr](https://www.data.go.kr/data/15125364/openapi.do) K-Startup Open API (dataset 15125364) when a **data.go.kr service key** is available, and **automatically falls back to the public-page crawler when no key is present or the API fails / is blocked / returns an unexpected shape** (identical output schema and manifest). The key is read from the repo-root `.env` (`DATA_GO_KR_KEY=...`), the `DATA_GO_KR_KEY` env var, or the shared `~/.config/data_go_kr_key`, and is **never printed to logs, errors, or the command line** (`.env` is gitignored). The same key is reused by sole-search's gov24.
@@ -150,6 +181,7 @@ or `/ir-search` (Claude Code). The agent reads the project context from the fold
 The crawlers also work standalone (paths relative to the plugin directory):
 
 ```bash
+python3 skills/ir-search/scripts/scope_plan.py --preset recommended -o scope-plan.json
 python3 skills/ir-search/scripts/kstartup_crawl.py list -o all.jsonl            # all open K-Startup announcements
 python3 skills/ir-search/scripts/kstartup_crawl.py detail 178481 -o details/    # K-Startup detail pages
 python3 skills/ir-search/scripts/sources_crawl.py list bizinfo -o biz.jsonl     # Bizinfo
@@ -178,6 +210,7 @@ ir-search/
     └── ir-search/
         ├── SKILL.md                  # workflow (profile → collect all → review all → verify → 3-tier report)
         ├── scripts/
+        │   ├── scope_plan.py         # offline scope/source-status/fingerprint execution plan
         │   ├── kstartup_crawl.py     # K-Startup crawler (API-first, crawl fallback)
         │   ├── kstartup_api.py       # K-Startup official Open API client (data.go.kr)
         │   ├── sources_crawl.py      # Bizinfo / NIPA / KOCCA / SMTECH crawler

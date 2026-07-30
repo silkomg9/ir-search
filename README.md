@@ -66,6 +66,36 @@ K-Startup·기업마당(bizinfo)·NIPA·KOCCA·SMTECH의 모집중 공고를 크
 
 그 외 소스(NIA·IITP·IRIS·지역기관 등)는 `skills/ir-search/references/sources.md`의 레지스트리 참조.
 
+## 조사 범위 선택
+
+매번 모든 사이트를 훑지 않아도 됩니다. `scope_plan.py`가 요청 범위를 먼저 고정하고,
+자동 수집·수동 확인·후보 소스를 구분한 실행계획과 안정적인 `scope_fingerprint`를 만듭니다.
+이 과정은 네트워크·API·LLM을 호출하지 않아 토큰과 외부 쿼터를 쓰지 않습니다.
+
+| 프리셋 | 용도 |
+|---|---|
+| `quick` | K-Startup 한 곳만 빠르게 확인 |
+| `focused` | 사용자가 고른 등록 소스 한 곳만 |
+| `recommended` | K-Startup·기업마당 + 프로필 태그와 맞는 자동 소스(권장) |
+| `all_registered` | 현재 자동화된 모든 등록 소스 |
+| `all_known` | 후보·수동 확인 소스까지 빠짐없이 계획 |
+| `custom` | `--include`로 지정한 소스만 선택 |
+
+```bash
+python3 skills/ir-search/scripts/scope_plan.py \
+  --preset recommended --need ai --need rnd \
+  --out survey-20260730/scope-plan.json
+
+# K-Startup만 확인
+python3 skills/ir-search/scripts/scope_plan.py \
+  --preset custom --source kstartup --out /tmp/ir-scope.json
+```
+
+`all_known`에 포함된 IRIS·IITP·NIA·KIAT·수출바우처·창조경제혁신센터·지역기관은
+자동 크롤 성공으로 가장하지 않고 `manual` 또는 `candidate`로 남깁니다. 재조사 diff는
+동일한 fingerprint와 완전 수집 상태일 때만 소멸을 판정하므로 범위 변경을 GONE으로
+오인하지 않습니다.
+
 ### K-Startup 공식 API (선택 — 있으면 더 정확·빠름, 없으면 크롤)
 
 `kstartup_crawl.py list`는 [공공데이터포털](https://www.data.go.kr/data/15125364/openapi.do)의 **data.go.kr 서비스키**가 있으면 K-Startup 공식 오픈API로 모집중 공고를 받고, **키가 없거나 API가 실패·차단·이상이면 자동으로 공개 페이지 크롤로 폴백**합니다(출력 스키마·매니페스트 동일). 키는 리포 루트 `.env`(`DATA_GO_KR_KEY=...`), 환경변수 `DATA_GO_KR_KEY`, 또는 공용 `~/.config/data_go_kr_key`에서 읽으며 **로그·에러·명령행에 절대 출력되지 않습니다**(`.env`는 `.gitignore`). 같은 키가 sole-search의 gov24에도 재사용됩니다.
@@ -155,6 +185,7 @@ pip3 install 'curl_cffi>=0.15'
 크롤러는 단독으로도 쓸 수 있습니다(플러그인 디렉토리 기준 경로):
 
 ```bash
+python3 skills/ir-search/scripts/scope_plan.py --preset recommended -o scope-plan.json
 python3 skills/ir-search/scripts/kstartup_crawl.py list -o all.jsonl            # K-Startup 모집중 전수
 python3 skills/ir-search/scripts/kstartup_crawl.py detail 178481 -o details/    # K-Startup 상세공고
 python3 skills/ir-search/scripts/sources_crawl.py list bizinfo -o biz.jsonl     # 기업마당
@@ -183,6 +214,7 @@ ir-search/
     └── ir-search/
         ├── SKILL.md                  # 워크플로 (프로필 → 전수수집 → 전수검토 → 상세검증 → 3분류 보고)
         ├── scripts/
+        │   ├── scope_plan.py         # 조사 범위·소스 상태·fingerprint 실행계획(오프라인)
         │   ├── kstartup_crawl.py     # K-Startup 크롤러 (API 우선, 키 없으면 크롤 폴백)
         │   ├── kstartup_api.py       # K-Startup 공식 오픈API 클라이언트 (data.go.kr)
         │   ├── sources_crawl.py      # 기업마당·NIPA·KOCCA·SMTECH 크롤러
