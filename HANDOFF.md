@@ -10,7 +10,10 @@
 - 실제 조사 1회 완료: `C:\Users\LISA\Documents\지원사업조사_리사_20260907\` (보고서.md, dashboard.html, 원시 jsonl, 상세 원문, 첨부). 재조사(diff 모드)는 이 폴더를 직전 결과로 씀.
 - 로컬 미리보기: `.claude/launch.json`(gitignore) → `output/` 폴더를 8765 포트로 서빙. `output/`도 gitignore.
 
+- **civic-search(새 스킬) 착수**: 개인·모임·비영리·협동조합 대상 교육·공모·지원사업 조사용. 2026-09-07 소스 조사 완료 → `docs/research/civic-sources-2026-09-07.md`(통합 분석) + `docs/research/raw/`(원시 5개). 소스 레지스트리 초안 `skills/civic-search/references/sources.md`(verified 25 / candidate / manual / excluded), 프로필 템플릿 `civic-search-profile.template.md`. SKILL.md·크롤러는 아직 없음.
+
 ## 다음 할 일
+0. **civic-search 다음 단계**: (a) 레지스트리의 "후속 확인" 항목을 브라우저로 검증(seoulpa.kr, coop.go.kr, chest bbs 매핑, arko/jfac XHR, work24 목록 URL, seoul.go.kr robots `/news`) → (b) 어댑터 `gnuboard`·`wordpress`·`gg_baseboard`·`rss` 4종 먼저 구현(verified 소스 절반 커버) → (c) SKILL.md 작성(ir-search 워크플로 재사용, 프로필 축만 교체). 주의: seoulmaeul.org는 도메인 탈취 상태라 링크 금지.
 1. **수주(입찰) 크롤러** `skills/ir-search/scripts/g2b_api.py` — 나라장터 입찰공고 공개 API(data.go.kr 키 재사용, 데이터셋 활용신청 필요). 출력 jsonl에 `kind=bid`, `budget/bl/method/dueT` 채우기 → `build_dashboard.py bootstrap`이 그대로 받음. 키 처리·마스킹은 `kstartup_api.py` 방식 재사용.
 2. 사용자가 data.go.kr 키 발급 + 나라장터 API 활용신청 후 `.env`에 `DATA_GO_KR_KEY=` 저장.
 3. 재조사 흐름 실검증: 2~4주 뒤 `diff_surveys.py` + `bootstrap --merge`로 직전 판정 보존 확인.
