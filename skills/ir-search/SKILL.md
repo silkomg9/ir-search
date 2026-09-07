@@ -221,6 +221,8 @@ python3 "${CLAUDE_PLUGIN_ROOT}/skills/ir-search/scripts/kstartup_crawl.py" detai
 
 ```bash
 # ① 크롤 jsonl → dashboard.json 초안 (판정 전: 전건 '미평가')
+#    수집이 수백 건(기업마당 1,500건+ 등)이면 전체가 아니라 2단계에서 고른 **후보만 담은 candidates.jsonl**로 부트스트랩한다.
+#    전수 검토 건수·소스별 수집 상태는 notes에 적는다 (대시보드는 판정 결과물이지 원시 목록이 아니다)
 python3 "${CLAUDE_PLUGIN_ROOT}/skills/ir-search/scripts/build_dashboard.py" bootstrap     kstartup_all.jsonl bizinfo.jsonl --profile ir-search-profile.md     --date <YYYY-MM-DD> --region <연고 지역> --report-path <보고서.md> -o dashboard.json
 
 # ② Claude가 dashboard.json에 판정을 기록 (아래 규칙)
