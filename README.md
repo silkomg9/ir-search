@@ -2,7 +2,9 @@
 
 # ir-search
 
-[![smoke](https://github.com/djfksjd/ir-search/actions/workflows/smoke.yml/badge.svg)](https://github.com/djfksjd/ir-search/actions/workflows/smoke.yml)
+> 이 저장소는 [djfksjd/ir-search](https://github.com/djfksjd/ir-search)(MIT)를 포크해 **수주(입찰) 조사 + HTML 대시보드** 기능을 덧붙이는 중입니다. 원 스킬의 지원사업 조사 기능은 그대로 동작합니다.
+
+[![smoke](https://github.com/silkomg9/ir-search/actions/workflows/smoke.yml/badge.svg)](https://github.com/silkomg9/ir-search/actions/workflows/smoke.yml)
 
 > ⚠️ **한국(대한민국) 정부·공공기관 지원사업 전용**입니다. 다른 국가의 지원 프로그램은 다루지 않습니다.
 
@@ -108,7 +110,7 @@ python3 skills/ir-search/scripts/scope_plan.py \
 **한 줄 설치** — 설치된 호스트(claude/codex/agy/gemini)를 자동 감지해 전부 설치하고, CLI가 없으면 `~/.agents/skills/`에 clone(Cursor·Grok Build용)합니다. 의존성(`curl_cffi`)까지 처리:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/djfksjd/ir-search/main/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/silkomg9/ir-search/main/install.sh | bash
 ```
 
 수동으로 하려면 아래에서 쓰는 에이전트의 방법을 고르세요 — 한 트리로 모든 호스트를 지원합니다.
@@ -116,8 +118,8 @@ curl -fsSL https://raw.githubusercontent.com/djfksjd/ir-search/main/install.sh |
 ### Claude Code
 
 ```bash
-claude plugin marketplace add djfksjd/ir-search
-claude plugin install ir-search@djfksjd
+claude plugin marketplace add silkomg9/ir-search
+claude plugin install ir-search@silkomg9
 ```
 
 *의존성 `curl_cffi`는 세션 시작 훅(`SessionStart`)이 자동으로 설치합니다.*
@@ -125,8 +127,8 @@ claude plugin install ir-search@djfksjd
 ### Codex
 
 ```bash
-codex plugin marketplace add djfksjd/ir-search
-codex plugin add ir-search@djfksjd
+codex plugin marketplace add silkomg9/ir-search
+codex plugin add ir-search@silkomg9
 ```
 
 *의존성 `curl_cffi`는 세션 시작 훅(`SessionStart`)이 자동으로 설치합니다.*
@@ -134,7 +136,7 @@ codex plugin add ir-search@djfksjd
 ### agy (Antigravity CLI)
 
 ```bash
-agy plugin install djfksjd/ir-search
+agy plugin install silkomg9/ir-search
 agy plugin enable ir-search
 pip3 install 'curl_cffi>=0.15'   # agy는 SessionStart 훅이 없기 때문에 별도 설치 필요
 ```
@@ -142,7 +144,7 @@ pip3 install 'curl_cffi>=0.15'   # agy는 SessionStart 훅이 없기 때문에 �
 ### Gemini CLI
 
 ```bash
-gemini extensions install https://github.com/djfksjd/ir-search
+gemini extensions install https://github.com/silkomg9/ir-search
 pip3 install 'curl_cffi>=0.15'
 ```
 
@@ -154,7 +156,7 @@ pip3 install 'curl_cffi>=0.15'
 
 ```bash
 mkdir -p ~/.agents/skills
-git clone https://github.com/djfksjd/ir-search.git ~/.agents/skills/ir-search
+git clone https://github.com/silkomg9/ir-search.git ~/.agents/skills/ir-search
 pip3 install 'curl_cffi>=0.15'
 ```
 
@@ -163,7 +165,7 @@ pip3 install 'curl_cffi>=0.15'
 ### 클래식 (Claude Code 스킬로 직접 clone)
 
 ```bash
-git clone https://github.com/djfksjd/ir-search.git ~/.claude/skills/ir-search
+git clone https://github.com/silkomg9/ir-search.git ~/.claude/skills/ir-search
 pip3 install 'curl_cffi>=0.15'
 ```
 

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # ir-search one-command installer
-#   curl -fsSL https://raw.githubusercontent.com/djfksjd/ir-search/main/install.sh | bash
+#   curl -fsSL https://raw.githubusercontent.com/silkomg9/ir-search/main/install.sh | bash
 #
 # Detects installed host CLIs (claude / codex / agy / gemini) and installs the
 # plugin/extension for each. If no CLI is found, falls back to cloning into
@@ -8,7 +8,7 @@
 # file-based hosts). Per-host failures are non-fatal.
 set -u
 
-REPO="djfksjd/ir-search"
+REPO="silkomg9/ir-search"
 REPO_URL="https://github.com/${REPO}.git"
 INSTALLED=0
 
@@ -27,12 +27,12 @@ try_host() { # <name> <command...>
 
 if command -v claude >/dev/null 2>&1; then
   try_host "Claude Code" bash -c \
-    "claude plugin marketplace add ${REPO} && claude plugin install ir-search@djfksjd"
+    "claude plugin marketplace add ${REPO} && claude plugin install ir-search@silkomg9"
 fi
 
 if command -v codex >/dev/null 2>&1; then
   try_host "Codex" bash -c \
-    "codex plugin marketplace add ${REPO} && codex plugin add ir-search@djfksjd"
+    "codex plugin marketplace add ${REPO} && codex plugin add ir-search@silkomg9"
 fi
 
 if command -v agy >/dev/null 2>&1; then

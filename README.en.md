@@ -105,7 +105,7 @@ completeness permit it, so a scope change is not misreported as GONE.
 **One-command install** — detects installed host CLIs (claude/codex/agy/gemini) and installs for each; falls back to cloning into `~/.agents/skills/` (for Cursor / Grok Build) when no CLI is found. Also handles the `curl_cffi` dependency:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/djfksjd/ir-search/main/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/silkomg9/ir-search/main/install.sh | bash
 ```
 
 To install manually instead, pick the method for the agent you use — one tree supports all hosts.
@@ -113,8 +113,8 @@ To install manually instead, pick the method for the agent you use — one tree 
 ### Claude Code
 
 ```bash
-claude plugin marketplace add djfksjd/ir-search
-claude plugin install ir-search@djfksjd
+claude plugin marketplace add silkomg9/ir-search
+claude plugin install ir-search@silkomg9
 ```
 
 The `curl_cffi` dependency is auto-installed by a SessionStart hook.
@@ -122,14 +122,14 @@ The `curl_cffi` dependency is auto-installed by a SessionStart hook.
 ### Codex
 
 ```bash
-codex plugin marketplace add djfksjd/ir-search
-codex plugin add ir-search@djfksjd
+codex plugin marketplace add silkomg9/ir-search
+codex plugin add ir-search@silkomg9
 ```
 
 ### agy (Antigravity CLI)
 
 ```bash
-agy plugin install djfksjd/ir-search
+agy plugin install silkomg9/ir-search
 agy plugin enable ir-search
 pip3 install 'curl_cffi>=0.15'   # no SessionStart hook in agy — install manually
 ```
@@ -137,7 +137,7 @@ pip3 install 'curl_cffi>=0.15'   # no SessionStart hook in agy — install manua
 ### Gemini CLI
 
 ```bash
-gemini extensions install https://github.com/djfksjd/ir-search
+gemini extensions install https://github.com/silkomg9/ir-search
 pip3 install 'curl_cffi>=0.15'
 ```
 
@@ -149,7 +149,7 @@ Both read the shared skills directory (`~/.agents/skills/`) as well as `~/.claud
 
 ```bash
 mkdir -p ~/.agents/skills
-git clone https://github.com/djfksjd/ir-search.git ~/.agents/skills/ir-search
+git clone https://github.com/silkomg9/ir-search.git ~/.agents/skills/ir-search
 pip3 install 'curl_cffi>=0.15'
 ```
 
@@ -158,7 +158,7 @@ pip3 install 'curl_cffi>=0.15'
 ### Classic (clone directly as a Claude Code skill)
 
 ```bash
-git clone https://github.com/djfksjd/ir-search.git ~/.claude/skills/ir-search
+git clone https://github.com/silkomg9/ir-search.git ~/.claude/skills/ir-search
 pip3 install 'curl_cffi>=0.15'
 ```
 
