@@ -18,3 +18,6 @@ scratch/
 # data.go.kr service key — NEVER commit (K-Startup official API path)
 .env
 data_go_kr_key
+
+# 로컬 미리보기 서버 설정 (개인 환경)
+.claude/launch.json

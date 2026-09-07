@@ -68,6 +68,18 @@ K-Startup·기업마당(bizinfo)·NIPA·KOCCA·SMTECH의 모집중 공고를 크
 
 그 외 소스(NIA·IITP·IRIS·지역기관 등)는 `skills/ir-search/references/sources.md`의 레지스트리 참조.
 
+## HTML 대시보드
+
+보고서와 함께 같은 폴더에 `dashboard.html` 한 파일이 만들어집니다. 외부 라이브러리 없이 브라우저에서 바로 열리며, 상단에서 **전체 / 수주 / 지원사업**을 토글하고 검색·유형 칩·정렬(마감 임박순·적합도순·사업비순)·지역 한정 버튼으로 걸러 볼 수 있습니다. 판정 전 공고는 점수를 지어내지 않고 "미평가"로 표시됩니다.
+
+```bash
+# 크롤 jsonl → 데이터 초안 → (판정 기록) → HTML
+python3 skills/ir-search/scripts/build_dashboard.py bootstrap kstartup_all.jsonl   --profile ir-search-profile.md --region 제주 경기 -o dashboard.json
+python3 skills/ir-search/scripts/build_dashboard.py build dashboard.json -o dashboard.html
+```
+
+데이터 형식은 `skills/ir-search/references/dashboard_schema.md`, 템플릿은 `skills/ir-search/templates/dashboard.html`입니다. 색은 템플릿 상단 `:root` 토큰 6개만 바꾸면 됩니다.
+
 ## 조사 범위 선택
 
 매번 모든 사이트를 훑지 않아도 됩니다. `scope_plan.py`가 요청 범위를 먼저 고정하고,

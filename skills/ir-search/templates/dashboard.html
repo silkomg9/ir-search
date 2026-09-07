@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="ko"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>__TITLE__</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<style>
+/* ==========================================================================
+   ir-search 대시보드 템플릿 — 위니브 표준 서식 기반.
+   블루 스케일(--blue 계열) + 무채색(ink/body/muted)만 쓰고 다른 hue는 들이지 않는다.
+   문체는 개조식(~함, ~임)으로 통일한다.
+   ========================================================================== */
+:root{
+  --blue:#2E6FF2;       /* 브랜드 메인 블루 */
+  --blue-deep:#1E4FD8;  /* 진한 블루 (2단계 강조) */
+  --blue-navy:#16389E;  /* 가장 진한 블루 */
+  --blue-soft:#97B7F8;  /* 연한 블루 (보조) */
+  --blue-tint:#E9EFFE;  /* 아주 연한 블루 배경 */
+  --ink:#121314;        /* 제목·최고 강조 */
+  --body:#3A3F47;       /* 본문 */
+  --muted:#6B7280;      /* 보조 설명 */
+  --line:#E3E8F1;       /* 카드 테두리 */
+  --tint:#F3F5FA;       /* 연회색 패널 */
+  --paper:#ffffff;
+  --font:"Pretendard Variable","Pretendard",-apple-system,BlinkMacSystemFont,
+         "Apple SD Gothic Neo","Malgun Gothic","Noto Sans KR",sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font);background:var(--tint);color:var(--body);
+     line-height:1.6;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1280px;margin:0 auto;padding:0 28px 88px}
+
+/* ── 표지 헤더 (blue-bg + 이름) ── */
+header{position:relative;background:var(--blue);color:#fff;overflow:hidden;
+       padding:56px 0 52px;margin-bottom:34px}
+header .wrap{padding-bottom:0;position:relative;z-index:1}
+.brand{font-size:20px;font-weight:800;letter-spacing:-.02em;color:#fff;margin-bottom:26px;
+       display:inline-flex;align-items:center;gap:10px}
+.brand::before{content:'';width:12px;height:12px;border-radius:50%;background:#fff;opacity:.9}
+.eyebrow{font-size:14px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;
+         color:rgba(255,255,255,.9);margin-bottom:10px}
+h1{font-size:40px;font-weight:800;letter-spacing:-.035em;line-height:1.18;margin-bottom:14px}
+.sub{font-size:16px;color:rgba(255,255,255,.92);max-width:880px;line-height:1.6}
+.meta-row{display:flex;flex-wrap:wrap;gap:12px;margin-top:26px}
+.meta-row .m{background:rgba(255,255,255,.16);border-radius:8px;padding:8px 14px;font-size:13px}
+.meta-row .m b{font-weight:700}
+
+/* ── 지표 카드 ── */
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-bottom:38px}
+.kpi{background:var(--paper);border:1.5px solid var(--blue);border-radius:12px;padding:22px 24px}
+.kpi .k{font-size:14px;font-weight:700;color:var(--blue);margin-bottom:8px}
+.kpi .v{font-size:38px;font-weight:800;color:var(--ink);letter-spacing:-.03em;line-height:1.05}
+.kpi .u{font-size:13px;color:var(--muted);margin-top:8px}
+.kpi.lead{background:var(--blue);border-color:var(--blue)}
+.kpi.lead .k{color:rgba(255,255,255,.9)}
+.kpi.lead .v{color:#fff}
+.kpi.lead .u{color:rgba(255,255,255,.82)}
+
+/* ── 섹션 ── */
+section{margin-bottom:52px}
+.sec-head{display:flex;align-items:center;gap:20px;margin-bottom:14px}
+.numbadge{width:46px;height:46px;border-radius:12px;background:var(--blue);color:#fff;
+          font-size:21px;font-weight:800;display:flex;align-items:center;justify-content:center;flex:0 0 auto}
+h2{font-size:26px;font-weight:800;letter-spacing:-.03em;color:var(--ink);line-height:1.3}
+.sec-head .cnt{font-size:13px;color:var(--muted);font-weight:600;margin-left:auto;white-space:nowrap}
+.sec-desc{font-size:14.5px;color:var(--body);margin:0 0 20px;line-height:1.68;max-width:1000px}
+.sec-desc b,.note b,.c-fit b,.c-warn b{color:var(--blue-deep);font-weight:700}
+
+/* ── 조작부 ── */
+.controls{background:var(--paper);border:1px solid var(--line);border-radius:12px;
+          padding:14px 16px;margin-bottom:20px;display:flex;flex-wrap:wrap;gap:10px;
+          align-items:center;position:sticky;top:0;z-index:20;
+          box-shadow:0 2px 14px rgba(18,19,20,.07)}
+.controls input[type=text]{flex:1;min-width:210px;border:1px solid var(--line);border-radius:8px;
+          padding:9px 13px;font-size:14px;font-family:inherit;color:var(--ink);background:#fff}
+.controls input:focus{outline:2px solid var(--blue);outline-offset:-1px;border-color:transparent}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{border:1px solid var(--line);background:#fff;border-radius:7px;padding:7px 14px;
+      font-size:13px;font-weight:600;color:var(--body);cursor:pointer;font-family:inherit;transition:.12s}
+.chip:hover{border-color:var(--blue);color:var(--blue)}
+.chip.on{background:var(--blue);border-color:var(--blue);color:#fff}
+.chips.kind .chip.on{background:var(--ink);border-color:var(--ink)}
+.ctl-lab{font-size:12.5px;color:var(--muted);font-weight:700}
+.ctl-sep{width:1px;height:22px;background:var(--line)}
+select{border:1px solid var(--line);border-radius:8px;padding:9px 11px;font-size:13px;
+       font-family:inherit;background:#fff;color:var(--ink);cursor:pointer}
+
+/* ── 공고 카드 ── */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(380px,1fr));gap:16px}
+.card{background:var(--paper);border:1.5px solid var(--line);border-radius:12px;
+      padding:22px 24px 18px;display:flex;flex-direction:column;
+      position:relative;overflow:hidden;transition:.14s}
+.card:hover{box-shadow:0 8px 26px rgba(18,19,20,.10);transform:translateY(-2px)}
+.card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:5px;background:var(--line)}
+.card.t90::before{background:var(--blue-navy)}
+.card.t80::before{background:var(--blue)}
+.card.t70::before{background:var(--blue-soft)}
+.card.urgent{border-color:var(--ink)}
+.card.urgent::before{background:var(--ink)}
+
+.c-top{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;margin-bottom:12px}
+.c-title{font-size:17px;font-weight:700;letter-spacing:-.02em;line-height:1.42;color:var(--ink)}
+.score{flex-shrink:0;text-align:center;background:var(--blue-tint);border-radius:9px;
+       padding:7px 10px;min-width:58px}
+.score .v{font-size:20px;font-weight:800;color:var(--blue-deep);line-height:1.05}
+.score .k{font-size:10px;font-weight:700;color:var(--blue);letter-spacing:.04em;margin-top:1px}
+.score.low{background:var(--tint)}
+.score.low .v{color:var(--body)}
+.score.low .k{color:var(--muted)}
+.score.none{background:var(--tint);border:1px dashed var(--line)}
+.score.none .v{color:var(--muted);font-size:16px;line-height:1.35}
+.score.none .k{color:var(--muted)}
+
+.badges{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:13px}
+.b{font-size:11.5px;font-weight:700;padding:4px 10px;border-radius:6px;
+   background:var(--tint);color:var(--body)}
+.b.d0{background:var(--ink);color:#fff}
+.b.d1{background:var(--blue);color:#fff}
+.b.d2{background:var(--blue-tint);color:var(--blue-deep)}
+.b.region{background:var(--blue-deep);color:#fff}
+.b.money{background:var(--blue-tint);color:var(--blue-deep)}
+.b.kind-bid{background:var(--blue-navy);color:#fff}
+.b.kind-grant{background:#fff;color:var(--blue-navy);border:1px solid var(--blue-navy)}
+
+.c-body{font-size:13.8px;color:var(--body);line-height:1.66;margin-bottom:13px;flex-grow:1}
+.c-fit{font-size:13.2px;background:var(--blue-tint);border-left:3px solid var(--blue);
+       padding:10px 13px;border-radius:0 8px 8px 0;color:var(--body);
+       margin-bottom:12px;line-height:1.62}
+.c-fit.pending{background:var(--tint);border-left-color:var(--line);color:var(--muted)}
+.c-fit.pending b{color:var(--muted)}
+.c-warn{font-size:13px;background:var(--tint);border-left:3px solid var(--ink);
+        padding:10px 13px;border-radius:0 8px 8px 0;color:var(--body);
+        margin-bottom:12px;line-height:1.62}
+.c-warn b{color:var(--ink)}
+.kw{color:var(--blue-deep);font-weight:700}
+.c-warn .kw{color:var(--ink)}
+
+table.dl{width:100%;font-size:13px;border-collapse:collapse;margin-bottom:13px}
+table.dl th{text-align:left;color:var(--muted);font-weight:600;padding:4px 12px 4px 0;
+            white-space:nowrap;width:84px;vertical-align:top}
+table.dl td{padding:4px 0;color:var(--ink);font-weight:600;vertical-align:top}
+
+.c-foot{border-top:1px solid var(--line);padding-top:11px;display:flex;
+        justify-content:space-between;align-items:center;gap:10px}
+.org{font-size:12.5px;color:var(--muted);font-weight:600}
+a.link{font-size:13px;font-weight:700;color:var(--blue);text-decoration:none;white-space:nowrap}
+a.link:hover{text-decoration:underline}
+
+/* ── 표 ── */
+table.big{width:100%;border-collapse:collapse;background:var(--paper);
+          border:1px solid var(--line);border-radius:12px;overflow:hidden;font-size:13.5px}
+table.big th{background:var(--ink);color:#fff;text-align:left;padding:13px 16px;
+             font-size:12.5px;font-weight:700;letter-spacing:.02em;white-space:nowrap}
+table.big td{padding:13px 16px;border-bottom:1px solid var(--line);vertical-align:top;
+             color:var(--body);line-height:1.62}
+table.big tr:last-child td{border-bottom:none}
+table.big tr:hover td{background:var(--tint)}
+table.big td.nm{font-weight:700;color:var(--ink)}
+table.big td.num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap;
+                 font-weight:700;color:var(--ink)}
+table.big td b{color:var(--blue-deep)}
+table.big td.sc{text-align:center;font-weight:800}
+table.big td.sc.hi{color:var(--blue-navy)}
+table.big td a{color:var(--blue);font-weight:700;text-decoration:none}
+.dim{font-weight:400;color:var(--muted);font-size:12.5px}
+.tag{display:inline-block;font-size:11px;font-weight:700;padding:2px 7px;border-radius:5px;margin-right:6px;vertical-align:1px}
+.tag.bid{background:var(--blue-navy);color:#fff}
+.tag.grant{background:var(--blue-tint);color:var(--blue-navy)}
+
+.empty{text-align:center;padding:54px;color:var(--muted);font-size:14px;
+       background:var(--paper);border:1px dashed var(--line);border-radius:12px}
+
+/* ── 콜아웃 ── */
+.note{background:var(--paper);border:1px solid var(--line);border-left:5px solid var(--blue);
+      border-radius:0 12px 12px 0;padding:20px 24px;font-size:14px;color:var(--body);line-height:1.75}
+.note.ink{border-left-color:var(--ink)}
+.note .h{display:block;font-size:15.5px;font-weight:800;color:var(--ink);
+         margin:22px 0 8px}
+.note .h:first-child{margin-top:0}
+.note ul{margin:8px 0 0 20px}
+.note li{margin-bottom:6px}
+.note code{background:var(--tint);padding:2px 6px;border-radius:4px;font-size:12.5px;
+           color:var(--ink);word-break:break-all}
+
+footer{margin-top:56px;padding-top:24px;border-top:1px solid var(--line);
+       font-size:12.5px;color:var(--muted);line-height:1.85}
+footer a{color:var(--muted)}
+footer .fl{color:var(--ink);font-weight:700}
+
+@media(max-width:680px){
+  h1{font-size:28px}
+  .grid{grid-template-columns:1fr}
+  .controls{position:static}
+  .wrap{padding:0 16px 60px}
+  table.big{display:block;overflow-x:auto}
+}
+@media print{
+  body{background:#fff}
+  .controls{display:none}
+  .card{break-inside:avoid;box-shadow:none;transform:none}
+  header{background:var(--blue)!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  table.big th{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+}
+</style></head>
+<body>
+
+<header>
+  <div class="wrap">
+    <div class="brand" id="brand"></div>
+    <div class="eyebrow" id="eyebrow"></div>
+    <h1 id="h1"></h1>
+    <p class="sub" id="sub"></p>
+    <div class="meta-row" id="meta-row"></div>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <div class="kpis">
+    <div class="kpi lead"><div class="k">7일 내 마감 — 즉시 대응</div><div class="v" id="k1">-</div><div class="u" id="k1u"></div></div>
+    <div class="kpi"><div class="k">현재 접수 중</div><div class="v" id="k2">-</div><div class="u" id="k2u">제안서·신청서 작성이 가능한 건</div></div>
+    <div class="kpi"><div class="k">적합도 80점 이상</div><div class="v" id="k3">-</div><div class="u" id="k3u">주력과 직결되는 건</div></div>
+    <div class="kpi"><div class="k">구성</div><div class="v" id="k4">-</div><div class="u" id="k4u"></div></div>
+  </div>
+
+  <!-- ══ Ⅰ. 접수 중 ══ -->
+  <section>
+    <div class="sec-head"><div class="numbadge">Ⅰ</div><h2>지금 지원 가능한 공고</h2><span class="cnt" id="cnt-open"></span></div>
+    <p class="sec-desc" id="desc-open"></p>
+
+    <div class="controls">
+      <span class="ctl-lab">구분</span>
+      <div class="chips kind" id="kind-chips">
+        <button class="chip on" data-k="all">전체</button>
+        <button class="chip" data-k="bid">수주</button>
+        <button class="chip" data-k="grant">지원사업</button>
+      </div>
+      <span class="ctl-sep"></span>
+      <input type="text" id="q" placeholder="사업명·기관명 검색">
+      <span class="ctl-lab">유형</span>
+      <div class="chips" id="cat-chips"></div>
+      <span class="ctl-lab">정렬</span>
+      <select id="sort">
+        <option value="dday">마감 임박순</option>
+        <option value="score">적합도순</option>
+        <option value="budget">사업비 큰 순</option>
+      </select>
+      <div class="chips" id="region-chips"></div>
+    </div>
+
+    <div class="grid" id="cards"></div>
+    <div class="empty" id="empty" style="display:none">조건에 맞는 공고가 없음</div>
+  </section>
+
+  <!-- ══ Ⅱ. 요건 충족 시 / 연례 반복 ══ -->
+  <section id="sec-roadmap">
+    <div class="sec-head"><div class="numbadge">Ⅱ</div><h2>요건 충족 시 열림 · 연례 반복 — 다음 회차 준비 대상</h2><span class="cnt" id="cnt-roadmap"></span></div>
+    <p class="sec-desc">지금은 자격이 안 되거나 이번 회차가 마감되었으나, <b>트리거(법인 설립·투자유치 등)를 충족하거나 다음 회차를 준비하면 열리는 사업</b>임. 연쇄 경로와 준비 포인트를 명시함</p>
+    <table class="big">
+      <thead><tr><th>사업명</th><th>주관기관</th><th>다음 공고 예상 · 트리거</th><th style="text-align:right">규모</th><th style="text-align:center">적합</th><th>준비 포인트</th></tr></thead>
+      <tbody id="roadmap"></tbody>
+    </table>
+  </section>
+
+  <!-- ══ Ⅲ. 변형하면 가능 ══ -->
+  <section id="sec-reframe">
+    <div class="sec-head"><div class="numbadge">Ⅲ</div><h2>변형(프레이밍)하면 가능</h2><span class="cnt" id="cnt-reframe"></span></div>
+    <p class="sec-desc">키워드 검색으로는 잡히지 않지만, <b>아이템을 다른 분야의 언어로 재서술하면 대상이 되는 사업</b>임. 각 건의 프레이밍 각도와 리스크를 함께 적음</p>
+    <table class="big">
+      <thead><tr><th>사업명</th><th>기관</th><th>프레이밍 각도</th><th>리스크</th><th style="white-space:nowrap">마감</th></tr></thead>
+      <tbody id="reframe"></tbody>
+    </table>
+  </section>
+
+  <!-- ══ Ⅳ. 제외 ══ -->
+  <section id="sec-excluded">
+    <div class="sec-head"><div class="numbadge">Ⅳ</div><h2>검토 후 제외 — 요건 미충족</h2><span class="cnt" id="cnt-excluded"></span></div>
+    <p class="sec-desc">규모는 크나 현재 조건으로는 지원이 어렵거나 실익이 없다고 판단한 건임. 요건 변동 시 재검토 대상임</p>
+    <table class="big">
+      <thead><tr><th>사업명</th><th>기관</th><th style="text-align:right">규모</th><th>제외 사유</th></tr></thead>
+      <tbody id="excluded"></tbody>
+    </table>
+  </section>
+
+  <!-- ══ Ⅴ. 결론 ══ -->
+  <section id="sec-conclusion">
+    <div class="sec-head"><div class="numbadge">Ⅴ</div><h2>탐색 결론</h2></div>
+    <div class="note" id="conclusion"></div>
+  </section>
+
+  <div class="note ink">
+    <b class="h">데이터 신뢰도 안내</b>
+    <ul id="notes"></ul>
+  </div>
+
+  <footer id="footer"></footer>
+</div>
+
+<script>
+/* ── 데이터 (build_dashboard.py가 채움) ── */
+const DATA = __DATA_JSON__;
+
+/* ── helpers ── */
+const KIND = {bid:"수주", grant:"지원사업"};
+const TODAY = new Date(DATA.meta.date + "T00:00:00");
+const won = n => n==null ? "불명" : n>=100000000 ? (n/100000000).toFixed(2).replace(/\.?0+$/,'')+"억원" : Math.round(n/10000).toLocaleString()+"만원";
+const dday = d => d ? Math.round((new Date(d+"T00:00:00") - TODAY)/86400000) : null;
+const esc = s => String(s??'').replace(/&/g,'&amp;').replace(/</g,'&lt;');
+const fmtDate = d => { if(!d) return "불명"; const [y,m,dd]=d.split('-'); return `${y}. ${+m}. ${+dd}.`; };
+const kindTag = k => `<span class="tag ${k}">${KIND[k]||k}</span>`;
+const sc = v => v==null ? '<span class="dim">미평가</span>' : v;
+
+const OPEN = DATA.open||[], ROADMAP = DATA.roadmap||[], REFRAME = DATA.reframe||[], EXCL = DATA.excluded||[];
+const M = DATA.meta;
+
+/* ── 헤더 ── */
+document.title = `${M.target} 사업 탐색 대시보드 · ${fmtDate(M.date)}`;
+document.getElementById('brand').textContent = M.target;
+document.getElementById('eyebrow').textContent = M.eyebrow || "Business Opportunity Scan";
+document.getElementById('h1').textContent = `${M.target} 사업 탐색 대시보드`;
+document.getElementById('sub').textContent = M.profile_summary || "";
+const C = M.counts || {};
+const cnt = (k,arr) => C[k] ?? arr.length;
+document.getElementById('meta-row').innerHTML = [
+  `<span class="m">기준일 <b>${fmtDate(M.date)}</b></span>`,
+  M.channels?.length ? `<span class="m">수집 채널 <b>${esc(M.channels.join(' · '))}</b></span>` : '',
+  `<span class="m">검토 건수 <b>${cnt('open',OPEN)+cnt('roadmap',ROADMAP)+cnt('reframe',REFRAME)+cnt('excluded',EXCL)}건</b> (접수중 ${cnt('open',OPEN)} · 요건충족시 ${cnt('roadmap',ROADMAP)} · 변형 ${cnt('reframe',REFRAME)} · 제외 ${cnt('excluded',EXCL)})</span>`
+].join('');
+document.getElementById('desc-open').innerHTML =
+  `${fmtDate(M.date)} 기준 접수가 열려 있고 현재 조건으로 참가·신청이 가능한 건임. 적합도는 <b>① 과업·지원 내용이 주력과 겹치는 정도 ② 유사 실적·자격 보유 여부 ③ 지역·자격 요건 충족 여부</b>를 종합하여 산정함. 판정 전 항목은 <b>미평가</b>로 표시함`;
+
+/* ── state ── */
+let kind="all", cat="전체", region=null, sortBy="dday", q="";
+const REGIONS = M.regions && M.regions.length ? M.regions : (M.region ? [M.region] : []);
+const itemRegion = o => o.region || (o.region_only && REGIONS[0]) || null;  // 구형 region_only 호환
+document.getElementById('region-chips').innerHTML =
+  REGIONS.map(r=>`<button class="chip" data-r="${esc(r)}">${esc(r)} 한정만</button>`).join('');
+document.querySelectorAll('#region-chips .chip').forEach(b=>b.onclick=()=>{
+  region = region===b.dataset.r ? null : b.dataset.r;
+  document.querySelectorAll('#region-chips .chip').forEach(x=>x.classList.toggle('on',x.dataset.r===region));
+  render();
+});
+document.querySelectorAll('#kind-chips .chip').forEach(b=>b.onclick=()=>{
+  kind=b.dataset.k;
+  document.querySelectorAll('#kind-chips .chip').forEach(x=>x.classList.toggle('on',x===b));
+  buildCats(); render();
+});
+function buildCats(){
+  const pool = OPEN.filter(o=>kind==="all"||o.kind===kind);
+  const cats = ["전체", ...new Set(pool.map(o=>o.cat).filter(Boolean))];
+  if(!cats.includes(cat)) cat="전체";
+  document.getElementById('cat-chips').innerHTML =
+    cats.map(c=>`<button class="chip${c===cat?' on':''}" data-c="${esc(c)}">${esc(c)}</button>`).join('');
+  document.querySelectorAll('#cat-chips .chip').forEach(b=>b.onclick=()=>{
+    cat=b.dataset.c;
+    document.querySelectorAll('#cat-chips .chip').forEach(x=>x.classList.toggle('on',x===b));
+    render();
+  });
+}
+document.getElementById('sort').onchange = e => { sortBy=e.target.value; render(); };
+document.getElementById('q').oninput = e => { q=e.target.value.trim().toLowerCase(); render(); };
+
+function render(){
+  let list = OPEN.filter(o =>
+    (kind==="all"||o.kind===kind) &&
+    (cat==="전체"||o.cat===cat) &&
+    (!region||itemRegion(o)===region) &&
+    (!q || (o.n+' '+o.org).toLowerCase().includes(q))
+  );
+  const s = o => o.score==null ? -1 : o.score;
+  const dd = o => { const v=dday(o.due); return v==null ? 99999 : v; };
+  list.sort((a,b)=>{
+    if(sortBy==="score") return s(b)-s(a) || dd(a)-dd(b);
+    if(sortBy==="budget") return (b.budget??-1)-(a.budget??-1) || dd(a)-dd(b);
+    return dd(a)-dd(b) || s(b)-s(a);
+  });
+
+  document.getElementById('cnt-open').textContent = `${list.length}건 표시 / 전체 ${OPEN.length}건`;
+  document.getElementById('empty').style.display = list.length ? 'none':'block';
+
+  document.getElementById('cards').innerHTML = list.map(o=>{
+    const d = dday(o.due);
+    const ddCls = d==null ? '' : d<=5 ? 'd0' : d<=11 ? 'd1' : 'd2';
+    const ddTxt = d==null ? '마감 불명' : d<0 ? '마감' : d===0 ? 'D-DAY' : `D-${d}`;
+    const dueTxt = o.due ? ` · ${o.due.slice(5).replace('-','/')}${o.dueT?' '+o.dueT:''}` : '';
+    const tier = o.score==null?'':o.score>=90?'t90':o.score>=80?'t80':o.score>=70?'t70':'';
+    const scoreBox = o.score==null
+      ? `<div class="score none"><div class="v">—</div><div class="k">미평가</div></div>`
+      : `<div class="score${o.score<70?' low':''}"><div class="v">${o.score}</div><div class="k">적합도</div></div>`;
+    const fit = o.fit
+      ? `<div class="c-fit"><b>적합 —</b> ${o.fit}</div>`
+      : `<div class="c-fit pending"><b>검증 전 —</b> 상세공고 원문 검증 후 적합 이유·점수를 기록함</div>`;
+    const rows = [];
+    if (o.kind==='bid' || o.budget!=null) rows.push(`<tr><th>${esc(o.bl||'사업비')}</th><td>${o.budget!=null?o.budget.toLocaleString()+'원':'불명'}</td></tr>`);
+    if (o.method) rows.push(`<tr><th>${o.kind==='bid'?'계약방식':'지원 형태'}</th><td>${esc(o.method)}</td></tr>`);
+    if (o.eligibility) rows.push(`<tr><th>자격</th><td>${esc(o.eligibility)}</td></tr>`);
+    return `<article class="card ${d!=null&&d<=5&&d>=0?'urgent':''} ${tier}">
+      <div class="c-top">
+        <h3 class="c-title">${esc(o.n)}</h3>
+        ${scoreBox}
+      </div>
+      <div class="badges">
+        <span class="b kind-${o.kind}">${KIND[o.kind]||o.kind}</span>
+        <span class="b ${ddCls}">${ddTxt}${dueTxt}</span>
+        ${o.cat?`<span class="b">${esc(o.cat)}</span>`:''}
+        ${o.budget!=null?`<span class="b money">${won(o.budget)}</span>`:''}
+        ${itemRegion(o)?`<span class="b region">${esc(itemRegion(o))} 한정</span>`:''}
+      </div>
+      ${o.sum&&o.sum!==o.n?`<p class="c-body">${esc(o.sum)}</p>`:'<div class="c-body"></div>'}
+      ${fit}
+      ${o.warn?`<div class="c-warn"><b>확인 필요 —</b> ${esc(o.warn)}</div>`:''}
+      ${rows.length?`<table class="dl">${rows.join('')}</table>`:''}
+      <div class="c-foot"><span class="org">${esc(o.org)}</span><a class="link" href="${esc(o.url)}" target="_blank" rel="noopener">공고 원문 →</a></div>
+    </article>`;
+  }).join('');
+}
+
+/* ── 정적 표 ── */
+const hideIfEmpty = (arr, secId, cntId) => {
+  document.getElementById(cntId).textContent = `${arr.length}건`;
+  if(!arr.length) document.getElementById(secId).style.display='none';
+};
+hideIfEmpty(ROADMAP,'sec-roadmap','cnt-roadmap');
+document.getElementById('roadmap').innerHTML = ROADMAP.map(r=>
+  `<tr><td class="nm">${kindTag(r.kind)}${r.url?`<a href="${esc(r.url)}" target="_blank" rel="noopener">${esc(r.n)}</a>`:esc(r.n)}</td><td>${esc(r.org)}</td><td style="white-space:nowrap;font-weight:700;color:var(--ink)">${esc(r.when)}</td><td class="num">${r.size||'불명'}</td><td class="sc ${r.score>=85?'hi':''}">${sc(r.score)}</td><td>${r.point||''}</td></tr>`
+).join('');
+
+hideIfEmpty(REFRAME,'sec-reframe','cnt-reframe');
+document.getElementById('reframe').innerHTML = REFRAME.map(r=>
+  `<tr><td class="nm">${kindTag(r.kind)}${r.url?`<a href="${esc(r.url)}" target="_blank" rel="noopener">${esc(r.n)}</a>`:esc(r.n)}</td><td>${esc(r.org)}</td><td>${r.angle||''}</td><td>${r.risk||''}</td><td style="white-space:nowrap">${fmtDate(r.due)}</td></tr>`
+).join('');
+
+hideIfEmpty(EXCL,'sec-excluded','cnt-excluded');
+document.getElementById('excluded').innerHTML = EXCL.map(r=>
+  `<tr><td class="nm">${kindTag(r.kind)}${esc(r.n)}</td><td>${esc(r.org)}</td><td class="num">${r.size||'불명'}</td><td>${r.reason||''}</td></tr>`
+).join('');
+
+/* ── 결론 · 안내 · 푸터 ── */
+if (DATA.conclusion) document.getElementById('conclusion').innerHTML = DATA.conclusion;
+else document.getElementById('sec-conclusion').style.display='none';
+
+const notes = (DATA.notes&&DATA.notes.length) ? DATA.notes : [
+  "<b>(불명 표기)</b> 공고 텍스트에 없는 값은 추정하지 않고 '불명'으로 표기함. 접수기관 유선확인을 권고함",
+  "<b>(원문 확인)</b> 최종 판단 전 공고 원문과 첨부(HWP/PDF)를 반드시 확인함"
+];
+document.getElementById('notes').innerHTML = notes.map(n=>`<li>${n}</li>`).join('');
+
+document.getElementById('footer').innerHTML = [
+  `<span class="fl">${esc(M.target)} 사업 탐색 대시보드</span> · 기준일 ${fmtDate(M.date)} · ir-search 스킬로 생성함`,
+  M.report_path ? `보고서: <code>${esc(M.report_path)}</code>` : '',
+  M.scope_fingerprint ? `조사 범위 fingerprint: <code>${esc(M.scope_fingerprint)}</code>` : ''
+].filter(Boolean).join('<br>');
+
+/* ── 지표 ── */
+const urgent = OPEN.filter(o=>{const d=dday(o.due); return d!=null&&d<=7&&d>=0;}).length;
+const urgentDates = OPEN.map(o=>({d:dday(o.due),due:o.due})).filter(x=>x.d!=null&&x.d<=7&&x.d>=0).map(x=>x.due).sort();
+document.getElementById('k1').textContent = urgent+"건";
+document.getElementById('k1u').textContent = urgentDates.length ? `${urgentDates[0].slice(5).replace('-','/')} ~ ${urgentDates[urgentDates.length-1].slice(5).replace('-','/')} 마감` : "7일 내 마감 건 없음";
+document.getElementById('k2').textContent = OPEN.length+"건";
+const scored = OPEN.filter(o=>o.score!=null).length;
+document.getElementById('k3').textContent = OPEN.filter(o=>o.score>=80).length+"건";
+document.getElementById('k3u').textContent = scored<OPEN.length ? `${OPEN.length-scored}건은 미평가` : "주력과 직결되는 건";
+const nb = OPEN.filter(o=>o.kind==='bid').length, ng = OPEN.filter(o=>o.kind==='grant').length;
+document.getElementById('k4').innerHTML = `${nb}<span style="font-size:18px;color:var(--muted)"> · </span>${ng}`;
+document.getElementById('k4u').textContent = `수주 ${nb}건 · 지원사업 ${ng}건`;
+
+buildCats();
+render();
+</script>
+</body></html>
