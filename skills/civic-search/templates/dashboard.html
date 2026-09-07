@@ -1,0 +1,334 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>__TITLE__</title>
+<style>
+/* ── 토큰 (vster.kr 참고: 흰 카드·연회색 바탕·검정 CTA·파랑 포인트) ── */
+:root{
+  --bg:#f7f7f8; --card:#ffffff; --fg:#111418; --muted:#6b7280; --line:#e5e7eb;
+  --accent:#2563eb; --accent-soft:#e8f0fe; --cta:#111418; --cta-fg:#ffffff;
+  --chip:#f3f4f6; --chip-on:#111418; --chip-on-fg:#ffffff;
+  --ok:#15803d; --warn:#b45309; --bad:#b91c1c; --shadow:0 1px 2px rgba(0,0,0,.05);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0f1115; --card:#171a21; --fg:#e7e9ee; --muted:#9aa3b2; --line:#2a2f3a;
+    --accent:#7aa2ff; --accent-soft:#1c2a4a; --cta:#e7e9ee; --cta-fg:#0f1115;
+    --chip:#232834; --chip-on:#e7e9ee; --chip-on-fg:#0f1115; --shadow:none;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0f1115; --card:#171a21; --fg:#e7e9ee; --muted:#9aa3b2; --line:#2a2f3a;
+  --accent:#7aa2ff; --accent-soft:#1c2a4a; --cta:#e7e9ee; --cta-fg:#0f1115;
+  --chip:#232834; --chip-on:#e7e9ee; --chip-on-fg:#0f1115; --shadow:none;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.55 -apple-system,"Pretendard","Malgun Gothic",system-ui,sans-serif}
+a{color:inherit;text-decoration:none}
+.wrap{max-width:1040px;margin:0 auto;padding:0 20px 60px}
+header.top{border-bottom:1px solid var(--line);background:var(--card)}
+header.top .wrap{display:flex;align-items:center;justify-content:space-between;height:64px;padding-bottom:0}
+.brand{display:flex;align-items:center;gap:12px;font-weight:800;font-size:20px}
+.brand .logo{color:var(--accent);font-size:22px;letter-spacing:-.5px}
+.brand .sep{width:1px;height:22px;background:var(--line)}
+.brand .date{font-weight:500;color:var(--muted);font-size:13px}
+.crumb{font-size:13px;color:var(--muted);margin:22px 0 8px}
+.crumb b{color:var(--fg);font-weight:600}
+h1{font-size:34px;line-height:1.2;letter-spacing:-.02em;margin:0 0 10px}
+.lead{color:var(--muted);margin:0 0 22px;font-size:16px}
+/* 검색 */
+.search{display:flex;gap:10px;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:10px;box-shadow:var(--shadow)}
+.search input{flex:1;border:0;background:transparent;font:inherit;font-size:16px;padding:10px 12px;color:var(--fg);outline:none}
+.search button{background:var(--cta);color:var(--cta-fg);border:0;border-radius:12px;padding:0 26px;font:inherit;font-weight:700;cursor:pointer}
+/* 탭 + 칩 */
+.tabs{display:flex;align-items:center;border-bottom:1px solid var(--line);margin-top:18px}
+.tabs button{background:none;border:0;padding:14px 18px;font:inherit;font-weight:600;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px}
+.tabs button.on{color:var(--accent);border-bottom-color:var(--accent)}
+.tabs .reset{margin-left:auto;border:1px solid var(--line);border-radius:10px;padding:8px 12px;font-size:13px;color:var(--muted);background:var(--card)}
+.chips{display:flex;flex-wrap:wrap;gap:8px;padding:16px 0 4px}
+.chip{border:1px solid var(--line);background:var(--card);border-radius:999px;padding:9px 16px;font:inherit;font-size:14px;cursor:pointer;color:var(--fg)}
+.chip.on{background:var(--chip-on);color:var(--chip-on-fg);border-color:var(--chip-on)}
+.chip .n{color:var(--muted);font-size:12px;margin-left:4px}
+.chip.on .n{color:inherit;opacity:.7}
+/* 서브 필터 패널 */
+.panel{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px 22px;margin-top:18px;box-shadow:var(--shadow)}
+.panel .ph{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.panel .ph b{font-size:17px}
+.panel .ph button{background:none;border:0;color:var(--accent);font:inherit;font-size:13px;cursor:pointer}
+.frow{display:grid;grid-template-columns:90px 1fr;gap:10px;align-items:start;padding:10px 0;border-top:1px solid var(--line)}
+.frow:first-of-type{border-top:0}
+.frow .lb{font-size:13px;color:var(--muted);padding-top:8px}
+.frow .chips{padding:0}
+.frow .chip{padding:6px 12px;font-size:13px}
+.actions{display:flex;gap:10px;margin-top:16px;flex-wrap:wrap}
+.actions .go{background:var(--cta);color:var(--cta-fg);border:0;border-radius:12px;padding:12px 22px;font:inherit;font-weight:700;cursor:pointer}
+.actions .ghost{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 18px;font:inherit;cursor:pointer;color:var(--fg)}
+/* 목록 헤더 */
+.lh{display:flex;align-items:center;justify-content:space-between;margin:28px 0 12px;flex-wrap:wrap;gap:8px}
+.lh h2{font-size:18px;margin:0}
+.lh .sort{font-size:13px;color:var(--muted)}
+.lh .sort button{background:none;border:0;font:inherit;font-size:13px;color:var(--muted);cursor:pointer;padding:0 4px}
+.lh .sort button.on{color:var(--fg);font-weight:700}
+/* 카드 */
+.list{display:flex;flex-direction:column;gap:12px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px 20px;box-shadow:var(--shadow);position:relative}
+.card .tags{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-bottom:8px}
+.tag{font-size:12px;padding:3px 9px;border-radius:999px;background:var(--chip);color:var(--fg)}
+.tag.acc{background:var(--accent-soft);color:var(--accent);font-weight:600}
+.tag.dd{margin-left:auto;font-weight:700}
+.tag.dd.soon{background:#fee2e2;color:var(--bad)}
+.tag.dd.mid{background:#fef3c7;color:var(--warn)}
+.tag.dd.far{background:#dcfce7;color:var(--ok)}
+.tag.dd.none{background:var(--chip);color:var(--muted)}
+.card h3{margin:0 0 6px;font-size:17px;line-height:1.35;letter-spacing:-.01em}
+.card h3 a:hover{color:var(--accent)}
+.card .meta{font-size:13px;color:var(--muted);margin-bottom:10px}
+.card .meta b{color:var(--fg);font-weight:600}
+.card ul{margin:0;padding-left:18px;color:var(--fg);font-size:14px}
+.card ul li{margin:2px 0}
+.card ul li.dim{color:var(--muted)}
+.card ul li.w{color:var(--warn)}
+.card .foot{display:flex;justify-content:flex-end;align-items:center;gap:10px;margin-top:10px}
+.card .foot button{background:none;border:1px solid var(--line);border-radius:8px;padding:5px 10px;font:inherit;font-size:12px;cursor:pointer;color:var(--muted)}
+.card .foot button.on{color:var(--accent);border-color:var(--accent)}
+.card .score{font-size:12px;color:var(--muted)}
+.card .score b{color:var(--accent)}
+.empty{padding:50px;text-align:center;color:var(--muted);background:var(--card);border:1px dashed var(--line);border-radius:16px}
+/* 페이지 */
+.pager{display:flex;justify-content:center;align-items:center;gap:8px;margin:22px 0}
+.pager button{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:8px 14px;font:inherit;cursor:pointer;color:var(--fg)}
+.pager button:disabled{opacity:.4;cursor:default}
+.pager span{color:var(--muted);font-size:13px}
+/* 하단 섹션 */
+details.sec{background:var(--card);border:1px solid var(--line);border-radius:16px;margin-top:14px;overflow:hidden}
+details.sec summary{cursor:pointer;padding:16px 20px;font-weight:700;font-size:16px;list-style:none;display:flex;justify-content:space-between}
+details.sec summary::-webkit-details-marker{display:none}
+details.sec summary .c{color:var(--muted);font-weight:500;font-size:13px}
+details.sec .body{padding:0 20px 18px;overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:14px;min-width:640px}
+th,td{text-align:left;padding:10px 8px;border-top:1px solid var(--line);vertical-align:top}
+th{color:var(--muted);font-weight:600;font-size:12px}
+.dim{color:var(--muted)}
+.kw{color:var(--accent)}
+.notes{font-size:13px;color:var(--muted);margin-top:18px}
+.notes ul{padding-left:18px}
+footer{font-size:12px;color:var(--muted);margin-top:30px;border-top:1px solid var(--line);padding-top:14px}
+@media (max-width:640px){
+  h1{font-size:26px}
+  .frow{grid-template-columns:1fr}
+  .frow .lb{padding-top:0}
+  .search button{padding:0 16px}
+}
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap">
+  <div class="brand"><span class="logo">civic</span><span class="sep"></span><span id="brand">공고 탐색</span><span class="sep"></span><span class="date" id="hdate"></span></div>
+</div></header>
+
+<div class="wrap">
+  <div class="crumb">홈 › <b>지원사업</b> <span id="eyebrow"></span></div>
+  <h1 id="h1">조건에 맞는 공고만 골라 보세요</h1>
+  <p class="lead" id="sub">분야로 크게 좁히고, 서브 필터로 지역·대상·접수상태까지 세밀하게 조정합니다</p>
+
+  <div class="search">
+    <input id="q" placeholder='공고명·기관·키워드로 검색 (예: "청년", "마을")'>
+    <button id="qbtn">검색</button>
+  </div>
+
+  <div class="tabs">
+    <button class="on" data-tab="cat">분야</button>
+    <button data-tab="src">출처</button>
+    <button class="reset" id="resetAll">↺ 검색어 초기화</button>
+  </div>
+  <div class="chips" id="tabchips"></div>
+
+  <div class="panel">
+    <div class="ph"><b>서브 필터</b><button id="resetSub">초기화</button></div>
+    <div class="frow"><div class="lb">지역</div><div class="chips" id="fRegion"></div></div>
+    <div class="frow"><div class="lb">구분</div><div class="chips" id="fKind"></div></div>
+    <div class="frow"><div class="lb">접수상태</div><div class="chips" id="fState"></div></div>
+    <div class="frow"><div class="lb">적합도</div><div class="chips" id="fScore"></div></div>
+    <div class="actions">
+      <button class="go" id="apply">🔍 이 조건으로 검색</button>
+      <button class="ghost" id="onlyBm">★ 북마크만 보기</button>
+    </div>
+  </div>
+
+  <div class="lh">
+    <h2>공고 목록 (<span id="count">0</span>건)</h2>
+    <div class="sort">정렬: <button data-sort="reg" class="on">등록순</button>·<button data-sort="due">마감순</button>·<button data-sort="score">적합도순</button></div>
+  </div>
+  <div class="list" id="list"></div>
+  <div class="pager" id="pager"></div>
+
+  <details class="sec"><summary>Ⅱ 요건 충족 시 / 연례 반복 <span class="c" id="c-roadmap"></span></summary><div class="body" id="t-roadmap"></div></details>
+  <details class="sec"><summary>Ⅲ 변형하면 가능 <span class="c" id="c-reframe"></span></summary><div class="body" id="t-reframe"></div></details>
+  <details class="sec"><summary>Ⅳ 검토 후 제외 <span class="c" id="c-excluded"></span></summary><div class="body" id="t-excluded"></div></details>
+  <details class="sec" open><summary>Ⅴ 탐색 결론</summary><div class="body" id="conclusion"></div></details>
+
+  <div class="notes" id="notes"></div>
+  <footer id="foot"></footer>
+</div>
+
+<script>
+/* ── 데이터 (build_dashboard.py가 채움) ── */
+const DATA = __DATA_JSON__;
+
+const KIND = {bid:"수주", grant:"지원사업"};
+const M = DATA.meta || {};
+const TODAY = new Date((M.date || new Date().toISOString().slice(0,10)) + "T00:00:00");
+const OPEN = DATA.open||[], ROADMAP = DATA.roadmap||[], REFRAME = DATA.reframe||[], EXCL = DATA.excluded||[];
+const esc = s => String(s??'').replace(/&/g,'&amp;').replace(/</g,'&lt;');
+const fmtDate = d => { if(!d) return "불명"; const [y,m,dd]=d.split('-'); return `${y}.${m}.${dd}`; };
+const dday = d => d ? Math.round((new Date(d+"T00:00:00") - TODAY)/86400000) : null;
+const PAGE = 24;
+
+/* 헤더 */
+document.title = `${M.target||'공고'} 탐색 대시보드 · ${fmtDate(M.date)}`;
+document.getElementById('brand').textContent = M.target ? `${M.target} 공고 탐색` : '공고 탐색';
+document.getElementById('hdate').textContent = `기준일 ${fmtDate(M.date)}`;
+document.getElementById('eyebrow').textContent = M.eyebrow ? `· ${M.eyebrow}` : '';
+if (M.profile_summary) document.getElementById('sub').textContent = M.profile_summary;
+
+/* 상태 */
+let bm = {}; try { bm = JSON.parse(localStorage.getItem('civic-bm')||'{}'); } catch(e) {}
+const st = { q:'', tab:'cat', cat:'', src:'', region:'', kind:'', state:'open', score:'', sort:'reg', bmOnly:false, page:1 };
+
+/* 파생 값 */
+const state = o => { const d = dday(o.due); if (d==null) return 'unknown'; if (d<0) return 'closed'; if (o.start && new Date(o.start+"T00:00:00")>TODAY) return 'upcoming'; return 'open'; };
+const cnt = (key, val) => OPEN.filter(o => (o[key]||'미분류')===val).length;
+const uniq = key => [...new Set(OPEN.map(o => o[key]||'미분류'))].sort((a,b)=>cnt(key,b)-cnt(key,a));
+
+/* 칩 그리기 */
+function chips(el, items, cur, onpick, withCount, key){
+  el.innerHTML = items.map(([v,l]) => `<button class="chip ${cur===v?'on':''}" data-v="${esc(v)}">${esc(l)}${withCount&&v?`<span class="n">${cnt(key,v)}</span>`:''}</button>`).join('');
+  el.querySelectorAll('.chip').forEach(b => b.onclick = () => { onpick(b.dataset.v); st.page=1; render(); });
+}
+function drawTop(){
+  const key = st.tab==='cat' ? 'cat' : 'source';
+  const cur = st.tab==='cat' ? st.cat : st.src;
+  const items = [['', '전체'], ...uniq(key).map(v=>[v,v])];
+  chips(document.getElementById('tabchips'), items, cur, v => { if(st.tab==='cat') st.cat=v; else st.src=v; }, true, key);
+  document.querySelectorAll('.tabs button[data-tab]').forEach(b => b.classList.toggle('on', b.dataset.tab===st.tab));
+}
+function drawSub(){
+  const regions = [['', '전국·전체'], ...(M.regions||[]).map(r=>[r, r+' 한정'])];
+  chips(document.getElementById('fRegion'), regions, st.region, v=>st.region=v);
+  chips(document.getElementById('fKind'), [['', '전체'], ['grant','지원사업'], ['bid','수주']], st.kind, v=>st.kind=v);
+  chips(document.getElementById('fState'), [['open','접수중·예정'], ['closed','마감'], ['', '전체(마감 포함)']], st.state, v=>st.state=v);
+  chips(document.getElementById('fScore'), [['', '전체'], ['80','80점 이상'], ['60','60점 이상'], ['rated','평가 완료만']], st.score, v=>st.score=v);
+}
+
+/* 필터·정렬 */
+function filtered(){
+  const q = st.q.trim().toLowerCase();
+  return OPEN.filter(o => {
+    if (st.cat && (o.cat||'미분류')!==st.cat) return false;
+    if (st.src && (o.source||'미분류')!==st.src) return false;
+    if (st.region && o.region && o.region!==st.region) return false; /* 지역 없는 공고(전국)는 통과 */
+    if (st.kind && o.kind!==st.kind) return false;
+    const s = state(o);
+    if (st.state==='open' && s==='closed') return false;
+    if (st.state==='closed' && s!=='closed') return false;
+    if (st.score==='rated' && o.score==null) return false;
+    if (st.score && st.score!=='rated' && !(o.score>=+st.score)) return false;
+    if (st.bmOnly && !bm[o.id]) return false;
+    if (q && !matchQ(o,q)) return false;
+    return true;
+  });
+}
+const matchQ = (o,q) => !q || [o.n,o.org,o.sum,o.cat,o.fit,o.eligibility].join(' ').toLowerCase().includes(q);
+function sorted(arr){
+  const a = [...arr];
+  if (st.sort==='due') a.sort((x,y)=> (x.due||'9999') < (y.due||'9999') ? -1 : 1);
+  else if (st.sort==='score') a.sort((x,y)=> (y.score??-1)-(x.score??-1));
+  else a.sort((x,y)=> (y.start||y.reg_date||'') > (x.start||x.reg_date||'') ? 1 : -1);
+  return a;
+}
+
+/* 카드 */
+function ddTag(o){
+  const d = dday(o.due);
+  if (d==null) return `<span class="tag dd none">마감 불명</span>`;
+  if (d<0) return `<span class="tag dd none">마감</span>`;
+  const cls = d<=3 ? 'soon' : d<=14 ? 'mid' : 'far';
+  return `<span class="tag dd ${cls}">${d===0?'D-day':'D-'+d}</span>`;
+}
+function card(o){
+  const lines = [];
+  lines.push(`<li>${esc(o.sum||o.n)}</li>`);
+  if (o.eligibility) lines.push(`<li>${esc(o.eligibility)}</li>`);
+  else if (o.fit) lines.push(`<li>${o.fit}</li>`);
+  else lines.push(`<li class="dim">자격·적합 검증 전</li>`);
+  if (o.warn) lines.push(`<li class="w">확인: ${esc(o.warn)}</li>`);
+  const meta = [esc(o.org||'불명'), o.region?`<b>${esc(o.region)}</b>`:null, `마감일 ${fmtDate(o.due)}${o.dueT?' '+o.dueT:''}`].filter(Boolean).join(' · ');
+  return `<article class="card" data-id="${esc(o.id)}">
+    <div class="tags"><span class="tag acc">${esc(o.cat||'미분류')}</span><span class="tag">${KIND[o.kind]||o.kind}</span><span class="tag">${esc(o.source||'')}</span>${o.method?`<span class="tag">${esc(o.method)}</span>`:''}${ddTag(o)}</div>
+    <h3><a href="${esc(o.url)}" target="_blank" rel="noopener">${esc(o.n)}</a></h3>
+    <div class="meta">${meta}</div>
+    <ul>${lines.join('')}</ul>
+    <div class="foot"><span class="score">적합도 ${o.score==null?'미평가':`<b>${o.score}</b>`}</span><button class="bmb ${bm[o.id]?'on':''}">${bm[o.id]?'★ 북마크됨':'☆ 북마크'}</button></div>
+  </article>`;
+}
+
+function render(){
+  drawTop(); drawSub();
+  const all = sorted(filtered());
+  document.getElementById('count').textContent = all.length.toLocaleString();
+  const pages = Math.max(1, Math.ceil(all.length/PAGE));
+  if (st.page>pages) st.page = pages;
+  const slice = all.slice((st.page-1)*PAGE, st.page*PAGE);
+  const list = document.getElementById('list');
+  list.innerHTML = slice.length ? slice.map(card).join('') : `<div class="empty">조건에 맞는 공고가 없습니다. 필터를 풀어 보세요.</div>`;
+  list.querySelectorAll('.bmb').forEach(b => b.onclick = () => {
+    const id = b.closest('.card').dataset.id; if (bm[id]) delete bm[id]; else bm[id]=1;
+    try { localStorage.setItem('civic-bm', JSON.stringify(bm)); } catch(e) {}
+    render();
+  });
+  document.getElementById('pager').innerHTML = all.length>PAGE ? `<button id="pp" ${st.page<=1?'disabled':''}>‹ 이전</button><span>${st.page} / ${pages}</span><button id="pn" ${st.page>=pages?'disabled':''}>다음 ›</button>` : '';
+  const pp=document.getElementById('pp'), pn=document.getElementById('pn');
+  if (pp) pp.onclick=()=>{st.page--; render(); window.scrollTo({top:document.querySelector('.lh').offsetTop-20});};
+  if (pn) pn.onclick=()=>{st.page++; render(); window.scrollTo({top:document.querySelector('.lh').offsetTop-20});};
+  document.querySelectorAll('.sort button').forEach(b => b.classList.toggle('on', b.dataset.sort===st.sort));
+  document.getElementById('onlyBm').classList.toggle('on', st.bmOnly);
+  document.getElementById('onlyBm').textContent = st.bmOnly ? '★ 전체 보기' : '★ 북마크만 보기';
+}
+
+/* 하단 표 */
+const link = (u,t) => u ? `<a href="${esc(u)}" target="_blank" rel="noopener">${t}</a>` : t;
+function table(id, rows, cols){
+  const el = document.getElementById(id);
+  if (!rows.length) { el.innerHTML = '<p class="dim">해당 없음</p>'; return; }
+  el.innerHTML = `<table><thead><tr>${cols.map(c=>`<th>${c[0]}</th>`).join('')}</tr></thead><tbody>${rows.map(r=>`<tr>${cols.map(c=>`<td>${c[1](r)}</td>`).join('')}</tr>`).join('')}</tbody></table>`;
+}
+table('t-roadmap', ROADMAP, [['사업명', r=>link(r.url, esc(r.n))+`<div class="dim">${esc(r.org||'')}</div>`], ['시기·트리거', r=>esc(r.when||'')], ['규모', r=>r.size||''], ['적합', r=>r.score??'<span class="dim">미평가</span>'], ['준비 포인트', r=>esc(r.point||'')]]);
+table('t-reframe', REFRAME, [['사업명', r=>link(r.url, esc(r.n))+`<div class="dim">${esc(r.org||'')}</div>`], ['프레이밍 각도', r=>esc(r.angle||'')], ['리스크', r=>esc(r.risk||'')], ['마감', r=>fmtDate(r.due)]]);
+table('t-excluded', EXCL, [['사업명', r=>esc(r.n)+`<div class="dim">${esc(r.org||'')}</div>`], ['규모', r=>r.size||''], ['제외 사유', r=>r.reason||'']]);
+document.getElementById('c-roadmap').textContent = `${ROADMAP.length}건`;
+document.getElementById('c-reframe').textContent = `${REFRAME.length}건`;
+document.getElementById('c-excluded').textContent = `${EXCL.length}건`;
+document.getElementById('conclusion').innerHTML = DATA.conclusion || '<p class="dim">결론 작성 전</p>';
+document.getElementById('notes').innerHTML = (DATA.notes||[]).length ? `<b>데이터 신뢰도 안내</b><ul>${DATA.notes.map(n=>`<li>${n}</li>`).join('')}</ul>` : '';
+document.getElementById('foot').innerHTML = [
+  M.channels?.length ? `수집 채널: ${esc(M.channels.join(' · '))}` : '',
+  M.scope_fingerprint ? `범위 지문: ${esc(M.scope_fingerprint)}` : '',
+  M.report_path ? `보고서: ${esc(M.report_path)}` : '',
+  `카드 레이아웃은 vster.kr/programs 를 참고함 · 북마크는 이 브라우저에만 저장됨`
+].filter(Boolean).join(' · ');
+
+/* 이벤트 */
+document.querySelectorAll('.tabs button[data-tab]').forEach(b => b.onclick = () => { st.tab=b.dataset.tab; render(); });
+document.getElementById('qbtn').onclick = () => { st.q = document.getElementById('q').value; st.page=1; render(); };
+document.getElementById('q').addEventListener('keydown', e => { if (e.key==='Enter') document.getElementById('qbtn').click(); });
+document.getElementById('apply').onclick = () => { st.q = document.getElementById('q').value; st.page=1; render(); window.scrollTo({top:document.querySelector('.lh').offsetTop-20, behavior:'smooth'}); };
+document.getElementById('resetAll').onclick = () => { document.getElementById('q').value=''; st.q=''; st.cat=''; st.src=''; st.page=1; render(); };
+document.getElementById('resetSub').onclick = () => { st.region=''; st.kind=''; st.state='open'; st.score=''; st.bmOnly=false; st.page=1; render(); };
+document.getElementById('onlyBm').onclick = () => { st.bmOnly=!st.bmOnly; st.page=1; render(); };
+document.querySelectorAll('.sort button').forEach(b => b.onclick = () => { st.sort=b.dataset.sort; st.page=1; render(); });
+render();
+</script>
+</body>
+</html>
