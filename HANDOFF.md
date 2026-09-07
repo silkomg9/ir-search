@@ -1,6 +1,6 @@
 # HANDOFF — ir-search (silkomg9 포크)
 
-마지막 갱신: 2026-09-07
+마지막 갱신: 2026-09-08
 
 ## 지금 상태
 - 원본 djfksjd/ir-search 를 포크해 **HTML 대시보드 기능**을 얹는 중. 지원사업(수혜) 조사는 원본 그대로 동작하고, 대시보드 생성(SKILL.md 5단계)이 추가됨.
@@ -11,6 +11,13 @@
 - 로컬 미리보기: `.claude/launch.json`(gitignore) → `output/` 폴더를 8765 포트로 서빙. `output/`도 gitignore.
 
 - **civic-search(새 스킬) 착수**: 개인·모임·비영리·협동조합 대상 교육·공모·지원사업 조사용. 2026-09-07 소스 조사 완료 → `docs/research/civic-sources-2026-09-07.md`(통합 분석) + `docs/research/raw/`(원시 5개). 소스 레지스트리 초안 `skills/civic-search/references/sources.md`(verified 25 / candidate / manual / excluded), 프로필 템플릿 `civic-search-profile.template.md`. SKILL.md·크롤러는 아직 없음.
+
+## civic-search (개인·모임·비영리·협동조합 지원사업 스킬) 진행 상태
+- 소스 레지스트리 v0.2: `skills/civic-search/references/sources.md` — 리사 판정(쓸만함/보류/제외) 반영, 목록 URL 전부 실호출 재확인·교정(2026-09-07~08).
+- 새로 찾은 핵심 소스: **아트누리(artnuri.or.kr)** — 전국 문화재단·유관기관 예술지원사업 통합 포털(아르코 운영, SSR). 아르코·제주문화예술재단(JS 사이트) 공고를 여기서 대체 수집 가능.
+- 점검표 HTML: `output/civic_sources_check.html` (gitignore, 로컬 미리보기 8765). 생성 스크립트는 스크래치패드에만 있음 — 필요하면 sources.md 표를 파싱해 다시 만든다.
+- 남은 확인: work24 훈련과정 목록 URL, kakaoimpact·jfac·chest_jeju·jejutp XHR, ggvc 목록 URL, jejusi eminwon 검색 파라미터, seoul.go.kr robots `/news` 허용 여부.
+- 다음 단계: civic-search SKILL.md 초안 + 어댑터 구현(gnuboard → wordpress → gg_baseboard → 개별 순).
 
 ## 다음 할 일
 0. **civic-search 다음 단계**: (a) 레지스트리의 "후속 확인" 항목을 브라우저로 검증(seoulpa.kr, coop.go.kr, chest bbs 매핑, arko/jfac XHR, work24 목록 URL, seoul.go.kr robots `/news`) → (b) 어댑터 `gnuboard`·`wordpress`·`gg_baseboard`·`rss` 4종 먼저 구현(verified 소스 절반 커버) → (c) SKILL.md 작성(ir-search 워크플로 재사용, 프로필 축만 교체). 주의: seoulmaeul.org는 도메인 탈취 상태라 링크 금지.
